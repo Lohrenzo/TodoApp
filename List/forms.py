@@ -33,7 +33,7 @@ class ListItemForm(forms.ModelForm):
     class Meta:
         model = ListItem
         # fields = "__all__"
-        fields = ("item_name", "item_list")
+        fields = ("item_name",)
 
 
 

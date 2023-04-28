@@ -44,7 +44,16 @@
                 </li>
                 {% endfor %}
             </ul>
-            <iframe src="{% url 'new_item' %}" width="100%" height="230rem" class="overflow-y-hidden overflow-x-hidden" frameborder="0"></iframe>
+            <form method="POST" action="{% url 'new_item' %}">
+                <fieldset class="p-2 bg-body-secondary rounded-bottom">
+                    {% csrf_token %}
+                    <div class="pb-2" style="font-size: 0.8rem;">
+                        {{ form|crispy }}
+                    </div>
+                    <button type="submit" class="btn btn-info border border-0 mb-2">Add <i class="fa fa-plus" aria-hidden="true"></i></button>
+                </fieldset>
+            </form>
+            <!-- <iframe src="{% url 'new_item' %}" width="100%" height="230rem" class="overflow-y-hidden overflow-x-hidden" frameborder="0"></iframe> -->
             <div class="popup card bg-body shadow border border-0 m-1 mb-3 g-col-4 p-3" id="popup">
                 <!-- <iframe src="{% url 'delete' todo_list.pk %}" class="overflow-y-hidden overflow-x-hidden" frameborder="0"></iframe> -->
                 <form action="{% url 'delete' todo_list.pk %}" enctype="multipart/form-data" method="POST">

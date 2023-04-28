@@ -77,11 +77,17 @@ def detail(request, pk):
         return render(request, 'detail.html', context)
 
     # return render(request, 'detail.html', context)
-def new_item(request):
+def new_item(request, pk):
+    todo_list = TodoList.objects.get(pk = pk) 
+    # list_items = todo_list.list_items.all() # 2nd Option (Reverse Relationship).
+    list_items = todo_list.list_items.filter(item_list = todo_list.pk)
+    list_item = None
     if request.method == 'POST':
         form = ListItemForm(request.POST)
         if form.is_valid:
-            form.save()
+            list_item = form.save(commit=False)
+            list_item.item_name = todo_list
+            list_item.save()
             return redirect("new_item")
     else:
         form = ListItemForm()
