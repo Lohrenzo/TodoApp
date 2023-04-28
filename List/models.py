@@ -4,7 +4,7 @@ from django.db import models
 class TodoList(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    picture = models.ImageField(null=True, blank=True, upload_to='images')
+    picture = models.ImageField(null=False, blank=False, upload_to='images')
     created = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
