@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{todo_list.title}} To Do List{% endblock %}
+
+{% block content %}
+
+
+    <div class="card shadow border border-0 m-1 mb-3 g-col-4 p-3">
+        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-caret-down-square" viewBox="0 0 16 16">
+            <path d="M3.626 6.832A.5.5 0 0 1 4 6h8a.5.5 0 0 1 .374.832l-4 4.5a.5.5 0 0 1-.748 0l-4-4.5z"/>
+            <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2z"/>
+        </svg> -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="50" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+            <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+        </svg>
+        <img class="card-img-top object-fit-cover detail-img" src="{{todo_list.picture.url}}" alt="List Image">
+        <div class="card-body position-relative">
+            <h4 class="card-title">{{todo_list.title}}</h4>
+            <p class="card-text">{{todo_list.description|linebreaksbr}}</p>
+            <ul class="center list-unstyled">
+                <!-- {% comment %}{% endcomment %} -->
+                {% for item in list_items %}
+                <li>
+                    <form class="container" action="{% url 'detail' todo_list.pk %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <table id="table table-striped display">
+                            <tbody>
+                                <tr class="justify-content-between">
+                                    <!-- <th><input type="checkbox" name="completed" {% if item.completed %}checked{% endif %} 
+                                        onclick="this.form.submit();"
+                                    ></th> -->
+                                    <td class="col-11">{{item.item_name}}</td>
+                                    <td class="col-1">
+                                        <button type="submit" class="btn btn-outline-none">
+                                            <i class="fa fa-trash text-danger text-end" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+            <iframe src="{% url 'new_item' %}" width="100%" height="230rem" class="overflow-y-hidden overflow-x-hidden" frameborder="0"></iframe>
+            <div class="popup card bg-body shadow border border-0 m-1 mb-3 g-col-4 p-3" id="popup">
+                <!-- <iframe src="{% url 'delete' todo_list.pk %}" class="overflow-y-hidden overflow-x-hidden" frameborder="0"></iframe> -->
+                <form action="{% url 'delete' todo_list.pk %}" enctype="multipart/form-data" method="POST">
+                    <h3 class="fs-4">Are You Sure you want to delete  <b>{{ todo_list.title }}</b> List?</h3>
+                    {% csrf_token %}
+                    <button class="btn btn-info" type="submit">Delete</button>
+                </form>            
+                <button type="button" class=" btn-close" onclick="closePopup()"></button>
+            </div>
+        </div>
+        
+    </div>
+    <div class="card shadow border border-0 m-1 mb-3 g-col-1 p-3">
+        <div class="detail-tool fs-3 gap-3" class="text-body-secondary">
+            <a href="" class="detail-icon text-dark" data-bs-toggle="tooltip" data-bs-placement="right" title="Edit {{ todo_list.title }} Items">
+                <i class="fa fa-pencil-square card-text" aria-hidden="true"></i>
+            </a>
+            <a onclick="openPopup()" class="detail-icon text-dark" title="Delete {{ todo_list.title }}">
+                <i class="fa fa-trash card-text" aria-hidden="true"></i>
+            </a>
+            <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
+                <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
+            </svg> -->
+        </div>
+    </div>
+
+    <script>
+    var popup = document.getElementById('popup');
+    // var toggle = document.getElementById('index-delete');
+
+    function openPopup() {
+        popup.classList.add("open-popup")
+
+    }
+
+    function closePopup() {
+        popup.classList.remove("open-popup")
+    }
+
+    </script>
+
+{% endblock %}
