@@ -5,7 +5,12 @@
 
 
 
-{% block title %}Search result for {{ searched }}{% endblock %}
+{% block title %}
+    {% if searched %}
+        Search result for {{ searched }}
+    {% else %}
+        Search for something!!     
+{% endblock %}
 
 {% block content %}
 <div class="d-flex flex-column">
@@ -48,10 +53,10 @@
                 </div>
             {% endfor %}
         {% else %}
-            <h4><span class="fw-bolder">"{{ searched }}"</span> Not Found</h4>
+            <h4>Please Make A Search!!</h4>
         {% endif %}
     {% else %}
-        <p>Logout In Order To Access This Page</p>
+        <p>Login In Order To Access This Page</p>
     {% endif %}
 </div>   
 

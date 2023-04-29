@@ -162,7 +162,7 @@ def register(request):
             messages.info(request, 'Passwords do not match')
             return redirect('register')
     else:
-        return render(request, 'Register.html')
+        return render(request, 'register.html')
 
 def user_login(request):
     if request.method=='POST':
