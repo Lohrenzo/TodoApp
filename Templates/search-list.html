@@ -10,8 +10,8 @@
 {% block content %}
 <div class="d-flex flex-column">
     {% if user.is_authenticated %}
-        <h4>Search Result for: <span class="fw-bolder">"{{ searched }}"</span></h4>
         {% if searched %}
+            <h4>Search Result for: <span class="fw-bolder">"{{ searched }}"</span></h4>
             {% for list in lists %}
                 <div class="grid position-relative text-center">
                         <div class="card bg-body shadow border border-0 m-1 mb-3 g-col-4 p-3">
@@ -47,6 +47,8 @@
                         </div>
                 </div>
             {% endfor %}
+        {% else %}
+            <h4><span class="fw-bolder">"{{ searched }}"</span> Not Found</h4>
         {% endif %}
     {% else %}
         <p>Logout In Order To Access This Page</p>
