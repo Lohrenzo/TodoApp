@@ -19,7 +19,7 @@
         <fieldset class="p-2 bg-body-secondary rounded-bottom">
             {% csrf_token %}
             <div class="pb-2" style="font-size: 0.8rem;">
-                {{ form|crispy }}
+                {{ item_form|crispy }}
                 
             </div>
             <button type="submit" class="btn btn-info border border-0 mb-2">Add <i class="fa fa-plus" aria-hidden="true"></i></button>

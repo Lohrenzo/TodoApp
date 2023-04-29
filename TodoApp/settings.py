@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-jwc#nsnqyokexy
 DEBUG=True
 
 
-ALLOWED_HOSTS = ['web-production-58b1.up.railway.app']
+ALLOWED_HOSTS = ['web-production-58b1.up.railway.app', '127.0.0.1']
 
 
 # Application definition
