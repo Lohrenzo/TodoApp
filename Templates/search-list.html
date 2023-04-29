@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+
+{% block title %}Search result for {{ searched }}{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column">
+    {% if user.is_authenticated %}
+        <h4>Search Result for: <span class="fw-bolder">"{{ searched }}"</span></h4>
+        {% if searched %}
+            {% for list in lists %}
+                <div class="grid position-relative text-center">
+                        <div class="card bg-body shadow border border-0 m-1 mb-3 g-col-4 p-3">
+                            <div class="position-relative">
+                                <a href="{% url 'edit' list.pk %}" class="fs-4 bg-body px-2 index-edit" title="Edit This List">
+                                    <i class="fa fa-pencil-square card-text" aria-hidden="true"></i>
+                                </a>
+                                <a class="fs-4 bg-body px-2 index-delete" id="index-delete" title="Delete This List">
+                                    <i class="fa fa-trash card-text" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                            <img class="card-img-top object-fit-cover " src="{{list.picture.url}}" alt="List Image" style="width:20em; height: 30vh;">
+                            <div class="card-body" style="width: 20em;">
+                                <h4 class="card-title">{{list.title}}</h4>
+                                <p class="card-text text-wrap">{{list.description|linebreaksbr|truncatechars:35}}</p>
+                                <a class="btn btn-info border border-0" href="{% url 'detail' list.pk %}" title="More Details">More Details</a>
+                                <br><br>
+                                <div class="card-footer">
+                                    <p class="card-text"><small class="text-body-secondary">{{list.created|timesince}}</small></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="g-col-4 g-start-6">.g-col-4 .g-start-6</div> -->            
+                        <div class="popup card bg-body shadow border border-0 m-1 mb-3 g-col-4 p-3" id="popup">
+                            <!-- <iframe src="{% url 'delete' list.pk %}" class="overflow-y-hidden overflow-x-hidden" frameborder="0"></iframe> -->
+                            <form action="" enctype="multipart/form-data" method="POST">
+                                <h3 class="fs-4">Are You Sure you want to delete  <b>{{ todo_list.title }}</b> List?</h3>
+                                {% csrf_token %}
+                                <button class="btn btn-info" type="submit">Delete</button>
+                            </form>
+                        
+                            <button type="button" class="close-pop btn-close"></button>
+                        </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% else %}
+        <p>Logout In Order To Access This Page</p>
+    {% endif %}
+</div>   
+
+<script>
+    var popup = document.getElementsByClassName('popup');
+    var indexDelete = document.getElementsByClassName('index-delete')
+    var closePop = document.getElementsByClassName('close-pop')
+
+    for (let i = 0; i < popup.length; i++) {
+        indexDelete[i].addEventListener("click", ()=>{
+            popup[i].classList.add("open-popup")
+        }
+        )
+    }
+
+    for (let i = 0; i < popup.length; i++) {
+        closePop[i].addEventListener("click", ()=>{
+            popup[i].classList.remove("open-popup")
+        }
+        )
+    }
+
+
+</script>
+{% endblock %}

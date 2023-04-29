@@ -31,6 +31,10 @@ html::-webkit-scrollbar-track:hover {
     background-color: transparent;
 }
 
+.get-started:hover {
+    box-shadow: 0 0 6px 3px;
+}
+
 .newlist{ 
     margin: 3rem !important;
 }
@@ -160,6 +164,10 @@ iframe::-webkit-scrollbar-track:hover {
 
     .detail-tool{
         flex-direction: row !important;
+    }
+
+    .edit-img {
+        width: 80vw !important;
     }
 }
 
