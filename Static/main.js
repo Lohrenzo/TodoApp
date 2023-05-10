@@ -35,8 +35,12 @@
 
 
 
+var cancel = document.querySelector(".cancel");
 
-
+function previousPage() {
+    window.history.back();
+}
+cancel.addEventListener("click", previousPage);
 
 
 

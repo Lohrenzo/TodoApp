@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Create {{profile.user.username}} Profile{% endblock %}
+
+{% block content %}
+{% for message in messages %}
+<div class="alert position-absolute z-3 mx-auto alert-danger alert-dismissable fade show" style="top: 5rem;" role="alert">
+    {{message}}
+    <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <h1 class="card-text py-2 text-center text-capitalize">Edit {{user.username}}'s Profile</h1>
+    <div class="card bg-body text-dark fw-bolder edit-img shadow border border-0 m-1 mb-3 g-col-4 p-0" style="width: 45em;">
+        <!-- {% comment %}<img src="{{ profile.profile_pic.url }}" class="card-img image-fluid object-fit-cover" style="height: 110vh; width: 50em; opacity: 0.8;" alt="{{todo_list.title}} Image">{% endcomment %} -->
+        <!-- <img src="{% static 'img/welcome-shoes.jpg' %}" class="card-img image-fluid object-fit-cover" style="height: 100vh; width: 50em; opacity: 0.8;" alt="{{todo_list.title}} Image"> -->
+        <div class="card-img-overlay">
+            <div class="pt-5 px-5">
+                {{profile_form.as_p}}
+                <button class="btn btn-success" style="width: 100%;" type="submit">Save</button>
+            </div><br>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
+

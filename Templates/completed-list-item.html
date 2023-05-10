@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{list_item.item_name}} To Do List{% endblock %}
+
+{% block content %}
+
+    <h3 class="fs-4">Congrats!! You Have Completed <b>{{list_item.item_name}}</b> Task</h3>
+
+    <div class="d-flex gap-2 flex-wrap">
+        {% for i in completed %}
+        <div class="card border border-0 m-1 mb-3 g-col-4 p-3">
+            <img class="card-img-top object-fit-cover" src="{{i.media_file.url}}" alt="Completed Image" style="width:20em; height: 30vh;">
+            <div class="caed-body">
+                <p class="card-text">{{i.caption}}</p>
+                <p class="card-text">Completer by {{i.completer}}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}

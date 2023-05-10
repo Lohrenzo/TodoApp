@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'List',
+    'Chats',
     'django.contrib.humanize',
     'crispy_forms',
     "crispy_bootstrap5",
@@ -123,6 +124,14 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = 'laurence.fubara@gmail.com'
+# EMAIL_HOST_PASSWORD ='xxxxx'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
 
 # Crispy Form
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"

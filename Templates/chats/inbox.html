@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Chat with friends{% endblock %}
+
+{% block content %}
+
+    {% for dm in masages %}
+        {{ dm.user.username }}
+    {% endfor %}
+
+{% endblock %}
