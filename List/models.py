@@ -37,7 +37,7 @@ class TodoList(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     # author = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    completion_date = models.DateField(blank=True)
+    completion_date = models.DateField(blank=True, null=True)
     likes = models.ManyToManyField(User, related_name="likes", blank=True)
     favourites = models.ManyToManyField(User, related_name ='favourite', default = None, blank = None)
 
