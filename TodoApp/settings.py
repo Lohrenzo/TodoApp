@@ -169,4 +169,4 @@ LOGIN_URL='login'
 
 # Simplified static file serving.
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-CSRF_TRUSTED_ORIGINS = ['https://web-production-58b1.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://bucket-list.up.railway.app']
