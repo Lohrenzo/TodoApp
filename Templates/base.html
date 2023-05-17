@@ -58,6 +58,8 @@
                   <ul class="dropdown-menu text-center me-xl-5" >
                     <li><a class="dropdown-item" href="{% url 'user-profile' user.profile.id %}">My Profile</a></li>
                     <br>
+                    <li><a href="{% url 'favourite-list' %}" class="dropdown-item">My Favourites</a></li>
+                    <br>
                     <li><a href="{% url 'logout' %}" class="dropdown-item text-danger text-decoration-none">Logout</a></li>
                   </ul>
                 </li>
