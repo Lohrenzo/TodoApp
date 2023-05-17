@@ -13,9 +13,13 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 from decouple import config
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Update database configuration from $DATABASE_URL.
+DATABASE_URL = "postgresql://postgres:maDyXrZDHybxi3YM28BO@containers-us-west-142.railway.app:5573/railway"
 
 
 # Quick-start development settings - unsuitable for production
@@ -88,14 +92,15 @@ WSGI_APPLICATION = 'TodoApp.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'todo_app',
-        'USER': 'lorenzo',
-        'PASSWORD': 'black',
-    }
+    'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=1000),
+    # 'default': {
+    #     # 'ENGINE': 'django.db.backends.sqlite3',
+    #     # 'NAME': BASE_DIR / 'db.sqlite3',
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'todo_app',
+    #     'USER': 'lorenzo',
+    #     'PASSWORD': 'black',
+    # }
 }
 
 
@@ -159,10 +164,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Login URL
 LOGIN_URL='login'
 
-# Update database configuration from $DATABASE_URL.
-import dj_database_url
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
+# db_from_env = dj_database_url.config(conn_max_age=500)
+# DATABASES['default'].update(db_from_env)
 
 # Simplified static file serving.
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
