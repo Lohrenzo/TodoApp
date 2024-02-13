@@ -1,4 +1,4 @@
-# build_files.sh
+# build.sh
 
 #!/usr/bin/env bash
 # exit on error
