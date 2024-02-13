@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+
+{% block title %}Login Here{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <p>Logout In Order To Access This Page</p>
+    {% else %}
+    {% for message in messages %}
+        <div class="alert alert-warning alert-dismissable fade show" role="alert">
+            {{message}}
+            <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+        <form action="" enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+            <div class="card bg-body text-dark fw-bolder shadow border border-0 m-1 mb-3 g-col-4 p-0" >
+                <img src="{% static 'img/note-and-pen.jpg' %}" class="card-img edit-img image-fluid object-fit-cover" style="height: 70vh; width: 40em; opacity: 0.8;" alt="{{todo_list.title}} Image">
+                <div class="card-img-overlay">
+                    <h1 class="card-text py-2 text-center">Login</h1>
+                    <div class="py-5">
+                        <input class="form-control my-2" type="text" placeholder="Username" name="username"><br>
+                        <input class="form-control my-2" type="password" placeholder="Password" name="password"><br><br>
+                        <button class="btn btn-success" style="width: 100%;" type="submit">Login</button>
+                    </div>
+                    <p class="card-text px-2"><a href="{% url 'password_reset' %}" style="--bs-link-hover-color-rgb: 25, 135, 84;" class="icon-link icon-link-hover">Forgotten your password?</a></p>
+                    <p class="card-footer text-center">Don't have an account?<a href="{% url 'register' %}" style="--bs-link-hover-color-rgb: 25, 135, 84;" class="icon-link px-1 icon-link-hover"> Sign Up</a></p>
+                </div>
+            </div>
+        </form>
+    {% endif %}
+{% endblock %}

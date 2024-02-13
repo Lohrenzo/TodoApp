@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}{{todo_list.title}} To Do List{% endblock %}
+
+{% block content %}
+
+<div class="detail-container">
+
+    <div class="card shadow border border-0 m-1 p-3">
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissible position-absolute opacity-75 fade show" role="alert" style="width: 100%; left: 0; right: 0; top: 0;">
+                <strong class="message fs-5">{{ message }}!</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-caret-down-square" viewBox="0 0 16 16">
+            <path d="M3.626 6.832A.5.5 0 0 1 4 6h8a.5.5 0 0 1 .374.832l-4 4.5a.5.5 0 0 1-.748 0l-4-4.5z"/>
+            <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2z"/>
+        </svg> -->
+        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="60" height="50" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+            <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+        </svg> -->
+        <img class="card-img-top object-fit-cover image-fluid detail-img" src="{{todo_list.picture.url}}" alt="List Image">
+        <div class="card-body position-relative">
+            <h4 class="card-title">{{todo_list.title}}</h4>
+            <p class="card-text">{{todo_list.description|linebreaksbr}}</p>
+            <ul class="center list-unstyled">
+                <!-- {% comment %}{% endcomment %} -->
+                {% for item in list_items %}
+                <li>
+                    <table id="table table-striped display">
+                        <tbody>
+                            <tr class="justify-content-between" style="font-size: 0.8rem;">
+                                <td class="col-2">
+                                    <form method="POST" action="{% url 'completed_list_item' todo_list.pk item.pk %}">
+                                        {% csrf_token %}    
+                                        {% if request.user in item.completed.all %}
+                                            <button type="submit" class="opacity-75 fs-5 px-0 py-0 complete-btn" id="complete-btn" title="Congrats!! You have completed {{item.item_name}}">
+                                                <i class="fa fa-check-square-o p-1 card-text" aria-hidden="true"></i>
+                                            </button>
+                                        {% else %}
+                                            <button type="submit" class="opacity-75 fs-5 px-0 py-0 complete-btn" id="complete-btn" title="Click me if you have completed {{item.item_name}} task">
+                                                <i class="fa fa-square-o p-1 card-text" aria-hidden="true"></i>
+                                            </button>
+                                        {% endif %}
+                                    </form>
+                                </td>
+                                <a href="">
+                                    <td title="{{item.total_completed}} person{{item.total_completed|pluralize}} completed this task!!" class="col-9 fst-italic list-item text-capitalize opacity-75">{{item.item_name}}</td>
+                                </a>
+                                <!-- <form action="{% url 'delete_list_item' todo_list.pk item.pk %}" method="POST"> -->
+                                {% if user.id == todo_list.author.id %}
+                                <td class="col-1">
+                                    <a href="{% url 'delete_list_item' todo_list.pk item.pk %}" class="btn btn-outline-none">
+                                        <i class="fa fa-trash text-danger text-end" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+                                {% endif %}
+                                <!-- </form> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                </li>
+                {% endfor %}
+            </ul>
+            <form method="POST" action="">
+                <fieldset class="p-2 bg-body-secondary rounded-bottom">
+                    {% csrf_token %}
+                    <div class="pb-2" style="font-size: 0.8rem;">
+                        {{ item_form|crispy }}
+                    </div>
+                    <button type="submit" class="btn btn-danger border border-0 mb-2">Add &#129321
+                        <!-- <i class="fa fa-plus" aria-hidden="true"></i> -->
+                    </button>
+                </fieldset>
+            </form>
+            <div class="popup card bg-body shadow border border-0 m-1 mb-3 g-col-4 p-3" id="popup">
+                <!-- <iframe src="{% url 'delete' todo_list.pk %}" class="overflow-y-hidden overflow-x-hidden" frameborder="0"></iframe> -->
+                <form action="{% url 'delete' todo_list.pk %}" enctype="multipart/form-data" method="POST">
+                    <h3 class="fs-4">Are You Sure you want to delete  <b>{{ todo_list.title }}</b> List?</h3>
+                    {% csrf_token %}
+                    <button class="btn btn-info" type="submit">Delete</button>
+                </form>            
+                <button type="button" class=" btn-close" onclick="closePopup()"></button>
+            </div>
+            <div class="text-center fst-italic row" style="font-size: 0.8rem;">
+                <p class="opacity-50 mt-1 col">{{ todo_list.created|timesince }} ago</p>
+                <p class="col opacity-50 mt-1">by {{ todo_list.author }}</p>
+            </div>
+        </div>
+        
+    </div>
+    {% if user.id == todo_list.author.id %}
+        <div class="card detail-tool-container shadow border border-0 m-1 mb-3 g-col-1 p-3">
+            <div class="detail-tool  fs-3 gap-3" class="text-body-secondary">
+                <a href="{% url 'edit' todo_list.pk %}" class="detail-icon text-dark" data-bs-toggle="tooltip" data-bs-placement="right" title="Edit {{ todo_list.title }} Items">
+                    <i class="fa fa-pencil-square card-text" aria-hidden="true"></i>
+                </a>
+                <a onclick="openPopup()" class="detail-icon text-dark" title="Delete {{ todo_list.title }}">
+                    <i class="fa fa-trash card-text" aria-hidden="true"></i>
+                </a>
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
+                    <path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
+                </svg> -->
+            </div>
+        </div>
+    {% endif %}
+
+    
+    <!-- Comments Modal -->
+    <div class="rounded card comment-section shadow border border-0 m-1 col p-3 bg-body" style="height: 90vh;">
+        <div class="modal-header">
+            <!-- <h1 class="modal-title fs-5" id="exampleModalLabel">{{todo_list.title}} Comments</h1> -->
+            <h1 class="modal-title text-justify fs-5" id="exampleModalLabel">{{todo_list.description}}</h1>
+        </div>
+        <div class="modal-body overflow-hidden bg-body p-0 m-1">
+            <!-- <form action="" method="POST" enctype="multipart/form-data"> -->
+                {% csrf_token %}
+                <!-- {% comment %}{{ form.as_p }}{% endcomment %} -->
+                <!-- <button type="submit" style="width: 100%;" class="btn btn-info border border-0 mb-2">Add</button> -->
+            <!-- </form> -->
+            <div class="overflow-y-auto scroll p-3 mb-2" style="height: 58vh;">
+                {% for comment in comments %}
+                <div class="user-comment" style="width: 100%;">
+                    <div class="d-flex justify-content-between" style="width: 100%;">
+                        <div class="d-flex">
+                            {% if comment.user.profile.profile_pic %}
+                            <img src="{{ comment.user.profile.profile_pic.url }}" class="image-fluid rounded-circle border border-1 me-2 mt-1" style="object-fit: contain; width: 1rem; height: 1rem;" alt="">
+                            <p class="me-1 fw-bold">{{comment.user}}</p>
+                            {% else %}
+                            <img src="{% static 'img/user-profile-thumbnail.png' %}" class="image-fluid rounded-circle border border-1 me-2 mt-1" style="object-fit: contain; width: 1rem; height: 1rem;" alt="">
+                            <p class="me-1 fw-bold">{{comment.user}}</p>
+                            {% endif %}
+                        </div>
+                        <p class="text-end fst-italic opacity-75" style="font-size: 0.7rem;">. {{comment.date|timesince}} ago</p>
+                    </div>
+                    <div class="text-justify">
+                        {{comment.body}}
+                    </div>
+                    <hr>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="px-3" style="max-height: 20vh;">
+                <form action="{% url 'comment' todo_list.pk %}" method="POST">
+                    {% csrf_token %}
+                    <textarea name="body" placeholder="Write a comment" class="form-control mb-1" id="" rows="3"></textarea>
+                    <!-- <input type="text" name="body" placeholder="Write a comment" class="form-control mb-1" id=""></textarea> -->
+                    <button class="btn btn-info" style="width: 100%;" type="submit">Add Comment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+    
+
+
+    <script>
+    var popup = document.getElementById('popup');
+    // var toggle = document.getElementById('index-delete');
+
+    function openPopup() {
+        popup.classList.add("open-popup")
+
+    }
+
+    function closePopup() {
+        popup.classList.remove("open-popup")
+    }
+
+    </script>
+
+{% endblock %}

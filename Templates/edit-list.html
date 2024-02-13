@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Edit {{ todo_list.title }}{% endblock %}
+
+{% block content %}
+<div class="grid">
+    {% if user.id == todo_list.author.id %}
+        <h4 class="text-center pb-3">Edit <b>{{ todo_list.title }}</b></h4>
+        <form action="{% url 'edit' todo_list.pk %}" enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+            <div class="card bg-body text-dark fw-bolder shadow border border-0 m-1 mb-3 g-col-4 p-0" >
+                <img src="{{todo_list.picture.url}}" class="card-img edit-img image-fluid object-fit-cover" style="height: 70vh; width: 40em; opacity: 0.5;" alt="{{todo_list.title}} Image">
+                <div class="card-img-overlay">
+                    {{ form|crispy }}
+                    <button class="btn btn-success" style="width: 100%;" type="submit">Submit</button>
+                </div>
+            </div>
+        </form>
+    {% else %}   
+        <h3 class="text-center">Don't Be Sneaky!! <br> You Have No Access To This Page.</h3>
+    {% endif %}   
+</div>
+{% endblock %}

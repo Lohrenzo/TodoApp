@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+
+{% block title %}
+    {% if searched %}
+        Search result for {{ searched }}
+    {% else %}
+        Search for something!!
+    {% endif %}     
+{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column">
+    {% if user.is_authenticated %}
+        {% if searched %}
+            <h4>Search Result for: <span class="fw-bolder">"{{ searched }}"</span></h4>
+            {% for list in lists %}
+                <div class="grid position-relative text-center">
+                    <div class="card bg-body shadow d-flex border border-0 m-1 mb-3 g-col-4 p-3">
+                        {% if user.id == list.author.id %}
+                            <a href="{% url 'edit' list.pk %}" class="fs-4 bg-body px-2 position-absolute index-edit" title="Edit This List">
+                                <i class="fa fa-pencil-square p-1 card-text" aria-hidden="true"></i>
+                            </a>
+                            <form method="POST" action="{% url 'like' list.pk %}">
+                            {% csrf_token %}
+                                {% if request.user in list.likes.all %}
+                                    <button type="submit" class=" fs-4 bg-body px-2 pt-1 position-absolute rounded-top like-btn" id="like-btn" title="Like {{list.title}}">
+                                        <i class="fa fa-heart p-1 card-text" aria-hidden="true"></i>
+                                    </button>                        
+                                {% else %}
+                                    <button type="submit" class=" fs-4 bg-body px-2 pt-1 position-absolute rounded-top like-btn" id="like-btn" title="Like {{list.title}}">
+                                        <i class="fa fa-heart-o p-1 card-text" aria-hidden="true"></i>
+                                    </button>                        
+                                {% endif %}
+                            </form>
+                            <!-- Delete modal trigger -->
+                            <!-- <a href="{% url 'delete' list.pk %}" data-bs-toggle="modal" data-bs-target="#staticBackdropp" class="fs-4 bg-body px-2 index-delete" title="Delete This List"> -->
+                            <!-- <a class="fs-4 bg-body px-2 position-absolute index-delete" id="index-delete" title="Delete This List">
+                                <i class="fa fa-trash p-1 card-text" aria-hidden="true"></i>
+                            </a> -->
+                        {% else %}
+                            <form method="POST" action="{% url 'like' list.pk %}">
+                                {% csrf_token %}    
+                                {% if request.user in list.likes.all %}
+                                    <button type="submit" class=" fs-4 bg-body px-2 pt-1 position-absolute rounded-top like-btn" id="like-btn" title="Like {{list.title}}">
+                                        <i class="fa fa-heart p-1 card-text" aria-hidden="true"></i>
+                                    </button>
+                                {% else %}
+                                    <button type="submit" class=" fs-4 bg-body px-2 pt-1 position-absolute rounded-top like-btn" id="like-btn" title="Like {{list.title}}">
+                                        <i class="fa fa-heart-o p-1 card-text" aria-hidden="true"></i>
+                                    </button>
+                                {% endif %}
+                            </form>
+                        {% endif %}
+                        <small class="text-center position-absolute p-2 like-count card-text">{{ list.total_likes }} like{{list.total_likes|pluralize}}</small>
+                        <img class="card-img-top object-fit-cover " src="{{list.picture.url}}" alt="List Image" style="width:20em; height: 30vh;">
+                        <div class="card-body" style="width: 20em;">
+                            <h4 class="card-title mt-2">{{list.title}}</h4>
+                            <p class="card-text text-wrap">{{list.description|linebreaksbr|truncatechars:35}}</p>
+                            <a class="btn btn-info border border-0" href="{% url 'detail' list.pk %}" title="More Details">More Details</a>
+                            <br><br>
+                            <div class="card-footer fst-italic row" style="font-size: 0.74rem;">
+                                <p class="opacity-50 mt-1 col">{{list.created|timesince}} ago</p>
+                                <p class="col opacity-50 mt-1">by {{ list.author }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="g-col-4 g-start-6">.g-col-4 .g-start-6</div> -->            
+                    <div class="popup card bg-body shadow border border-0 m-1 mb-3 g-col-4 p-3" id="popup">
+                        <!-- <iframe src="{% url 'delete' list.pk %}" class="overflow-y-hidden overflow-x-hidden" frameborder="0"></iframe> -->
+                        <form action="" enctype="multipart/form-data" method="POST">
+                            <h3 class="fs-4">Are You Sure you want to delete  <b>{{ todo_list.title }}</b> List?</h3>
+                            {% csrf_token %}
+                            <button class="btn btn-info" type="submit">Delete</button>
+                        </form>
+                    
+                        <button type="button" class="close-pop btn-close"></button>
+                    </div>
+                </div>
+            {% endfor %}
+
+            {% for list in list_descriptions %}
+                <div class="grid position-relative text-center">
+                    <div class="card bg-body shadow d-flex border border-0 m-1 mb-3 g-col-4 p-3">
+                        {% if user.id == list.author.id %}
+                            <a href="{% url 'edit' list.pk %}" class="fs-4 bg-body px-2 position-absolute index-edit" title="Edit This List">
+                                <i class="fa fa-pencil-square p-1 card-text" aria-hidden="true"></i>
+                            </a>
+                            <form method="POST" action="{% url 'like' list.pk %}">
+                            {% csrf_token %}
+                                {% if request.user in list.likes.all %}
+                                    <button type="submit" class=" fs-4 bg-body px-2 pt-1 position-absolute rounded-top like-btn" id="like-btn" title="Like {{list.title}}">
+                                        <i class="fa fa-heart p-1 card-text" aria-hidden="true"></i>
+                                    </button>                        
+                                {% else %}
+                                    <button type="submit" class=" fs-4 bg-body px-2 pt-1 position-absolute rounded-top like-btn" id="like-btn" title="Like {{list.title}}">
+                                        <i class="fa fa-heart-o p-1 card-text" aria-hidden="true"></i>
+                                    </button>                        
+                                {% endif %}
+                            </form>
+                            <!-- Delete modal trigger -->
+                            <!-- <a href="{% url 'delete' list.pk %}" data-bs-toggle="modal" data-bs-target="#staticBackdropp" class="fs-4 bg-body px-2 index-delete" title="Delete This List"> -->
+                            <!-- <a class="fs-4 bg-body px-2 position-absolute index-delete" id="index-delete" title="Delete This List">
+                                <i class="fa fa-trash p-1 card-text" aria-hidden="true"></i>
+                            </a> -->
+                        {% else %}
+                            <form method="POST" action="{% url 'like' list.pk %}">
+                                {% csrf_token %}    
+                                {% if request.user in list.likes.all %}
+                                    <button type="submit" class=" fs-4 bg-body px-2 pt-1 position-absolute rounded-top like-btn" id="like-btn" title="Like {{list.title}}">
+                                        <i class="fa fa-heart p-1 card-text" aria-hidden="true"></i>
+                                    </button>
+                                {% else %}
+                                    <button type="submit" class=" fs-4 bg-body px-2 pt-1 position-absolute rounded-top like-btn" id="like-btn" title="Like {{list.title}}">
+                                        <i class="fa fa-heart-o p-1 card-text" aria-hidden="true"></i>
+                                    </button>
+                                {% endif %}
+                            </form>
+                        {% endif %}
+                        <small class="text-center position-absolute p-2 like-count card-text">{{ list.total_likes }} like{{list.total_likes|pluralize}}</small>
+                        <img class="card-img-top object-fit-cover " src="{{list.picture.url}}" alt="List Image" style="width:20em; height: 30vh;">
+                        <div class="card-body" style="width: 20em;">
+                            <h4 class="card-title mt-2">{{list.title}}</h4>
+                            <p class="card-text text-wrap">{{list.description|linebreaksbr|truncatechars:35}}</p>
+                            <a class="btn btn-info border border-0" href="{% url 'detail' list.pk %}" title="More Details">More Details</a>
+                            <br><br>
+                            <div class="card-footer fst-italic row" style="font-size: 0.74rem;">
+                                <p class="opacity-50 mt-1 col">{{list.created|timesince}} ago</p>
+                                <p class="col opacity-50 mt-1">by {{ list.author }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="g-col-4 g-start-6">.g-col-4 .g-start-6</div> -->            
+                    <div class="popup card bg-body shadow border border-0 m-1 mb-3 g-col-4 p-3" id="popup">
+                        <!-- <iframe src="{% url 'delete' list.pk %}" class="overflow-y-hidden overflow-x-hidden" frameborder="0"></iframe> -->
+                        <form action="" enctype="multipart/form-data" method="POST">
+                            <h3 class="fs-4">Are You Sure you want to delete  <b>{{ todo_list.title }}</b> List?</h3>
+                            {% csrf_token %}
+                            <button class="btn btn-info" type="submit">Delete</button>
+                        </form>
+                    
+                        <button type="button" class="close-pop btn-close"></button>
+                    </div>
+                </div>
+            {% endfor %}
+
+        {% else %}
+            <h4>Please Make A Search!!</h4>
+        {% endif %}
+    {% else %}
+        <p>Login In Order To Access This Page</p>
+    {% endif %}
+</div>   
+
+<script>
+    var popup = document.getElementsByClassName('popup');
+    var indexDelete = document.getElementsByClassName('index-delete')
+    var closePop = document.getElementsByClassName('close-pop')
+
+    for (let i = 0; i < popup.length; i++) {
+        indexDelete[i].addEventListener("click", ()=>{
+            popup[i].classList.add("open-popup")
+        }
+        )
+    }
+
+    for (let i = 0; i < popup.length; i++) {
+        closePop[i].addEventListener("click", ()=>{
+            popup[i].classList.remove("open-popup")
+        }
+        )
+    }
+
+
+</script>
+{% endblock %}

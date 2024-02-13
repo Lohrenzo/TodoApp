@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <p>Logout In Order To Access This Page</p>
+    {% else %}
+    {% for message in messages %}
+        <div class="alert alert-warning alert-dismissable fade show" role="alert">
+            {{message}}
+            <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+        <form action="" enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+            <h1 class="card-text py-2 text-center">Sign Up</h1>
+            <div class="card bg-body text-dark fw-bolder edit-img shadow border border-0 m-1 mb-3 g-col-4 p-0" style="width: 45em;">
+                <!-- <img src="{% static 'img/welcome-shoes.jpg' %}" class="card-img image-fluid object-fit-cover" style="height: 100vh; width: 50em; opacity: 0.8;" alt="{{todo_list.title}} Image"> -->
+                <!-- <div class="card-img-overlay"> -->
+                    <div class="pt-5 px-5">
+                        <input type="text" class="form-control my-2" placeholder="First Name" name="first_name"><br>
+                        <input type="text" class="form-control my-2" placeholder="Last Name" name="last_name"><br>
+                        <input type="text" class="form-control my-2" placeholder="Username" name="username"><br>
+                        <input type="email" class="form-control my-2" placeholder="Email" name="email"><br>
+                        <input type="password" class="form-control my-2" placeholder="Password" name="password"><br>
+                        <input type="password" class="form-control my-2" placeholder="Confirm Password" name="password2"><br><br>                
+                        <button class="btn btn-success" style="width: 100%;" type="submit">Next</button>
+                    </div><br>
+                    <p class="card-body text-center">Already have an account?<a href="{% url 'login' %}" style="--bs-link-hover-color: #0d6efd;" class="icon-link px-1 icon-link-hover">Login</a></p>
+                <!-- </div> -->
+            </div>
+        </form>
+    {% endif %}
+{% endblock %}
