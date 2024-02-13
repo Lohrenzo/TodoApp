@@ -28,7 +28,6 @@ DATABASE_URL = "postgresql://postgres:maDyXrZDHybxi3YM28BO@containers-us-west-14
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '')
 SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECRET_KEY = config('SECRET_KEY')
 
