@@ -179,5 +179,5 @@ LOGIN_URL='login'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://bucket-list-h7c1.onrender.com",
+    "https://bucket-list-440q.onrender.com/",
 ]
